@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Showcase Produk</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <!-- Logo section -->
+    <div class="bg-gray-200 py-5 text-center">
+        <img src="logo-lp3i.png" alt="Logo" class="mx-auto" style="max-width: 150px;">
+    </div>
+
+    <div class="container mx-auto mt-10 flex-1">
+        <h5 class="text-center mb-2 text-lg font-semibold">Dealer Motor Resmi</h5>
+        <p class="text-center mb-8 text-gray-600">Berikut ini adalah beberapa motor yang tersedia:</p>
+        <div id="products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="bg-gray-800 text-white py-3 text-center text-sm">
+        &copy; 2023 byDikmal | Politeknik LP3I Kampus Tasikmalaya
+    </div>
+
+    <script>
+        fetch('http://localhost:3000/products')
+            .then(response => response.json())
+            .then(data => {
+                const productsDiv = document.getElementById('products');
+                data.forEach(product => {
+                    const categoryClass = product.category === 'AT' ? 'bg-blue-200 text-blue-700' : 'bg-orange-200 text-orange-700';
+                    const productCard = `
+                        <div class="card border border-gray-300 rounded-lg overflow-hidden bg-white shadow">
+                            <img class="w-full h-48 object-cover" src="${product.image}" alt="${product.name}">
+                            <div class="p-4">
+                                <h5 class="text-lg font-bold text-gray-800">${product.name}</h5>
+                                <p class="text-gray-600 mb-2">${product.description}</p>
+                                <span class="category inline-block py-1 px-2 rounded-full ${categoryClass}">${product.category}</span>
+                                <p class="text-lg font-semibold text-gray-900 mt-4">Rp${product.price.toLocaleString('id-ID')}</p>
+                            </div>
+                        </div>`;
+                    productsDiv.innerHTML += productCard;
+                });
+            });
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "Honda ADV",
+      "price": 23000000,
+      "category": "AT",
+      "image": "data:image/jpeg;base64,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",
+      "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit. Magnam, delectus."
+    },
+    {
+      "id": "2",
+      "name": "Honda CBR",
+      "price": 39000000,
+      "category": "MT",
+      "image": "https://imgresizerappprod.azurewebsites.net/api/resizer/360/png/https://motorkux.azureedge.net/sys-master-media/h6c/he4/8801972453406/CBR%20250%20RR%20ABS_JFO_BK.png",
+      "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit. Magnam, delectus."
+    },
+    {
+      "id": "3",
+      "name": "Vario 160",
+      "price": 27000000,
+      "category": "AT",
+      "image": "https://asset.kompas.com/crops/3ofu1Afq4TKsQg83EHNxsZ-3RZs=/9x0:689x453/1200x800/data/photo/2022/05/30/629494bb68078.jpg",
+      "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit. Magnam, delectus."
+    },
+    {
+      "name": "Supra Bapak",
+      "price": "17000000",
+      "category": "MT",
+      "image": "https://ik.imagekit.io/zlt25mb52fx/ahmcdn/uploads/product-draft/meta/thumbnail-new-supra-x-4-04032022-102904.png",
+      "description": "supraaa",
+      "id": "4"
+    },
+    {
+      "name": "stylo",
+      "price": "22000000",
+      "category": "AT",
+      "image": "https://www.hondacengkareng.com/wp-content/uploads/2024/02/Stylo-160-ABS-Royal-Green.png",
+      "description": "mantappp",
+      "id": "5"
+    },
+    {
+      "id": 6,
+      "name": "beat deluxe",
+      "price": "19990000",
+      "category": "AT",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRq3QMklhdwJyusaKLAL8WgKGDuNmRcxIKwsg&s",
+      "description": "beattt"
+    },
+    {
+      "name": "CRF",
+      "price": "40000000",
+      "category": "MT",
+      "image": "https://imgcdn.oto.com/medium/gallery/exterior/73/1263/honda-crf-150l-right-side-viewfull-image-966547.jpg",
+      "description": "crf 150",
+      "id": "7249"
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "name": "AT"
+    },
+    {
+      "id": "2",
+      "name": "MT"
+    }
+  ]
+}

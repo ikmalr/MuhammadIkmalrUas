@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Produk</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <div class="container mx-auto mt-10 flex-1">
+        <h1 class="text-center text-2xl font-bold mb-5">Admin Produk</h1>
+        <form id="productForm" class="bg-white p-6 rounded-lg shadow-md">
+            <div class="mb-4">
+                <label for="productName" class="block text-gray-700 font-bold mb-2">Nama Produk</label>
+                <input type="text" class="form-control w-full px-3 py-2 border rounded-lg" id="productName" required>
+            </div>
+            <div class="mb-4">
+                <label for="productPrice" class="block text-gray-700 font-bold mb-2">Harga Produk</label>
+                <input type="number" class="form-control w-full px-3 py-2 border rounded-lg" id="productPrice" required>
+            </div>
+            <div class="mb-4">
+                <label for="productCategory" class="block text-gray-700 font-bold mb-2">Kategori Produk</label>
+                <select class="form-control w-full px-3 py-2 border rounded-lg" id="productCategory" required>
+                    <!-- Categories will be populated here -->
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="productImage" class="block text-gray-700 font-bold mb-2">URL Gambar Produk</label>
+                <input type="text" class="form-control w-full px-3 py-2 border rounded-lg" id="productImage" required>
+            </div>
+            <div class="mb-4">
+                <label for="productDescription" class="block text-gray-700 font-bold mb-2">Deskripsi Produk</label>
+                <textarea class="form-control w-full px-3 py-2 border rounded-lg" id="productDescription" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Simpan</button>
+        </form>
+
+        <h2 class="text-xl font-bold mt-10 mb-5">Daftar Produk</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white rounded-lg shadow-md">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="py-2 px-4 border-b">Nama</th>
+                        <th class="py-2 px-4 border-b">Harga</th>
+                        <th class="py-2 px-4 border-b">Kategori</th>
+                        <th class="py-2 px-4 border-b">Gambar</th>
+                        <th class="py-2 px-4 border-b">Deskripsi</th>
+                        <th class="py-2 px-4 border-b">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="productTable" class="bg-white">
+                    <!-- Products will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        const productForm = document.getElementById('productForm');
+        const productTable = document.getElementById('productTable');
+        const productCategory = document.getElementById('productCategory');
+        let currentProductId = null;
+
+        // Fetch categories and populate the select options
+        fetch('http://localhost:3000/categories')
+            .then(response => response.json())
+            .then(categories => {
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.name;
+                    option.textContent = category.name;
+                    productCategory.appendChild(option);
+                });
+            });
+
+        // Fetch products and display in the table
+        function fetchProducts() {
+            fetch('http://localhost:3000/products')
+                .then(response => response.json())
+                .then(products => {
+                    productTable.innerHTML = '';
+                    products.forEach(product => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td class="py-2 px-4 border-b">${product.name}</td>
+                            <td class="py-2 px-4 border-b">Rp${product.price}</td>
+                            <td class="py-2 px-4 border-b">${product.category}</td>
+                            <td class="py-2 px-4 border-b"><img src="${product.image}" alt="${product.name}" class="w-12 h-12 object-cover"></td>
+                            <td class="py-2 px-4 border-b">${product.description}</td>
+                            <td class="py-2 px-4 border-b">
+                                <button class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded mr-2" onclick="editProduct(${product.id})">Edit</button>
+                                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded" onclick="deleteProduct(${product.id})">Delete</button>
+                            </td>`;
+                        productTable.appendChild(row);
+                    });
+                });
+        }
+
+        // Add or update product
+        productForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const productData = {
+                name: document.getElementById('productName').value,
+                price: document.getElementById('productPrice').value,
+                category: document.getElementById('productCategory').value,
+                image: document.getElementById('productImage').value,
+                description: document.getElementById('productDescription').value,
+            };
+
+            const requestOptions = {
+                method: currentProductId ? 'PUT' : 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(productData)
+            };
+
+            const url = currentProductId
+                ? `http://localhost:3000/products/${currentProductId}`
+                : 'http://localhost:3000/products';
+
+            fetch(url, requestOptions)
+                .then(response => response.json())
+                .then(() => {
+                    fetchProducts();
+                    productForm.reset();
+                    currentProductId = null;
+                    productForm.onsubmit = addOrUpdateProduct;
+                });
+        });
+
+        // Edit product
+        function editProduct(id) {
+            fetch(`http://localhost:3000/products/${id}`)
+                .then(response => response.json())
+                .then(product => {
+                    currentProductId = product.id;
+                    document.getElementById('productName').value = product.name;
+                    document.getElementById('productPrice').value = product.price;
+                    document.getElementById('productCategory').value = product.category;
+                    document.getElementById('productImage').value = product.image;
+                    document.getElementById('productDescription').value = product.description;
+                });
+        }
+
+        // Delete product
+        function deleteProduct(id) {
+            fetch(`http://localhost:3000/products/${id}`, {
+                method: 'DELETE'
+            })
+                .then(() => fetchProducts());
+        }
+
+        // Initial fetch of products
+        fetchProducts();
+    </script>
+</body>
+</html>
